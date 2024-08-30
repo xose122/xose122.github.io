@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crafting Kibblestasty Loot Generator</title>
+    <script src="https://kit.fontawesome.com/ea70fcfede.js" crossorigin="anonymous"></script>
+    <script src="./script.js" defer></script>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="header-container">
+        <div class="header">
+            <div class="title">
+                <div class="logo">
+                    <img class="logo-img" src="https://images.squarespace-cdn.com/content/v1/5e7eab9fcc76e2321541f8b3/a18ba2dd-becb-48d9-baf3-744e25a20e87/Doggo512Icon.png?format=1500w" alt="KibblesTasty">
+                </div>
+                <span class="logo-text">Crafting Kibblestasty Loot Generator</span>
+            </div>
+            <div class="options">
+                <div class="btn btn-round" id="add-creature-btn">
+                    <i class="fa-solid fa-sack-xmark"></i>
+                    <span class="btn-text">Loot/Harvesting/Remnants</span>
+                </div>
+                <div class="btn btn-round" id="gathering-btn">
+                    <i class="fa-solid fa-wheat-awn"></i>
+                    <span class="btn-text">Gathering</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="wrapper">
+            <table id="results-table" class="results-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>DC</th>
+                        <th>CR</th>
+                        <th>Dice Result</th>
+                        <th>Materials Found</th>
+                        <th>Special Materials/Coinage</th>
+                        <th>Gold Equivalence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Los resultados se añadirán aquí -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="popup-wrapper hide" id="popup-wrapper">
+        <div class="popup-overlay"></div>
+        <div class="popup-container-wrapper hide" id="popup-container-wrapper">
+            <div class="popup-container">
+                <div class="popup-header">
+                    <div id="close-popup-btn" class="popup-header-btn">
+                        <i class="fa-solid fa-xmark"></i>
+                    </div>
+                </div>
+                <!-- Aquí se añadirán dinámicamente las opciones -->
+                <div id="dynamic-options-container"></div>
+                <!-- Formulario de Basic Harvesting -->
+                <div id="basic-harvesting-form" class="hide">
+                    <div class="form-group">
+                        <div>
+                            <label for="creature-size">Creature Size:</label>
+                            <select id="creature-size">
+                                <!-- Opciones dinámicas -->
+                            </select>
+                        </div>
+                        <div>
+                            <label for="survival-modifier">Wisdom (Survival) Modifier:</label>
+                            <input type="text" id="survival-modifier" />
+                        </div>
+                        <div>
+                            <label for="looking-for">Looking For:</label>
+                            <select id="looking-for">
+                                <!-- Opciones dinámicas -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <label>
+                                <input type="checkbox" id="special-materials" />
+                                Attempt to extract special materials?
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group hide" id="special-materials-section">
+                        <div>
+                            <label for="creature-cr">Creature CR:</label>
+                            <input type="text" id="creature-cr" />
+                        </div>
+                        <div>
+                            <label for="creature-type">Creature Type:</label>
+                            <select id="creature-type">
+                                <!-- Opciones dinámicas -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button id="start-harvesting-btn">Start Harvesting</button>
+                    </div>
+                </div>
+                <div id="exotic-harvesting-form" class="hide">
+                    <div class="form-group">
+                        <div>
+                            <label for="creature-type-exotic">Creature Type:</label>
+                            <select id="creature-type-exotic">
+                                <option value="Dragon/Giants/Monstrosities">Dragon/Giants/Monstrosities</option>
+                                <option value="Construct">Construct</option>
+                                <option value="Aberration">Aberration</option>
+                                <option value="Undead">Undead</option>
+                                <option value="Plant">Plant</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="creature-cr-exotic">Creature CR:</label>
+                            <input type="text" id="creature-cr-exotic" />
+                        </div>
+                        <div>
+                            <label id="ability-modifier-label" for="ability-modifier-exotic">Ability Modifier:</label>
+                            <input type="text" id="ability-modifier-exotic" name="ability-modifier-exotic">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button id="start-exotic-harvesting-btn">Start Exotic Harvesting</button>
+                    </div>
+                </div>
+                <form id="exotic-remnants-form" class="hide">
+                    <label for="creature-type-remnants">Creature Type:</label>
+                    <select id="creature-type-remnants">
+                        <option value="Celestial">Celestial</option>
+                        <option value="Fiend">Fiend</option>
+                        <option value="Elemental">Elemental</option>
+                        <option value="Incorporal Undead">Incorporal Undead</option>
+                    </select>
+                
+                    <label for="creature-cr-remnants">Creature CR:</label>
+                    <input type="text" id="creature-cr-remnants" name="creature-cr-remnants">
+                
+                    <button type="button" id="start-exotic-remnants-btn">Start Exotic Remnants Harvesting</button>
+                </form>
+                <form id="gathering-reagents-form" class="hide">
+                    <!-- Otros campos del formulario -->
+                    
+                    <label for="traveling-checkbox">Are you traveling?</label>
+                    <input type="checkbox" id="traveling-checkbox">
+                    <br>
+                    
+                    <label for="biome-select">Select Biome:</label>
+                    <select id="biome-select">
+                        <option value="Forest">Forest</option>
+                        <option value="Desert">Desert</option>
+                        <option value="Grasslands">Grasslands</option>
+                        <option value="Marsh">Marsh</option>
+                        <option value="Mountains">Mountains</option>
+                        <option value="Caves">Caves</option>
+                        <option value="Underground">Underground</option>
+                        <option value="Jungles">Jungles</option>
+                        <option value="Shore">Shore</option>
+                        <option value="Tundra">Tundra</option>
+                        <option value="Feylands">Feylands</option>
+                        <option value="Shadowlands">Shadowlands</option>
+                        <option value="Elemental Plane">Elemental Plane</option>
+                        <option value="Lower Plane">Lower Plane</option>
+                        <option value="Upper Plane">Upper Plane</option>
+                        <option value="Outer Plane">Outer Plane</option>
+                    </select>
+                    
+                    <label for="wisdom-modifier">Wisdom Modifier:</label>
+                    <input type="text" id="wisdom-modifier">
+                    
+                    <label for="herbalism-proficiency">Do you have Herbalism Kit proficiency?</label>
+                    <input type="checkbox" id="herbalism-proficiency">
+                    
+                    <div id="proficiency-bonus-section" class="hide">
+                        <label for="proficiency-bonus">Proficiency Bonus:</label>
+                        <input type="text" id="proficiency-bonus">
+                    </div>
+
+                    <br>
+                    
+                    <button type="button" id="start-gathering-btn">Start Gathering</button>
+                </form>
+                <form id="gathering-materials-form" class="hide">
+                    <label for="traveling-checkbox-materials">Are you traveling?</label>
+                    <input type="checkbox" id="traveling-checkbox-materials">
+                    <br>
+                    <label for="biome-select-materials">Select Biome:</label>
+                    <select id="biome-select-materials">
+                        <option value="Caves">Caves</option>
+                        <option value="Underground">Underground</option>
+                        <option value="Jungles">Jungles</option>
+                        <option value="Shore">Shore</option>
+                        <option value="Tundra">Tundra</option>
+                        <option value="Forest">Forest</option>
+                        <option value="Desert">Desert</option>
+                        <option value="Grasslands">Grasslands</option>
+                        <option value="Marsh">Marsh</option>
+                        <option value="Mountains">Mountains</option>
+                    </select>
+                
+                    <label for="ability-modifier-materials">Strength/Dexterity/Wisdom Modifier:</label>
+                    <input type="text" id="ability-modifier-materials">
+                
+                    <label for="survival-proficiency">Do you have Survival proficiency?</label>
+                    <input type="checkbox" id="survival-proficiency">
+                
+                    <div id="proficiency-bonus-section-materials" class="hide">
+                        <label for="proficiency-bonus-materials">Proficiency Bonus:</label>
+                        <input type="text" id="proficiency-bonus-materials">
+                    </div>
+
+                    <br>
+                
+                    <button type="button" id="start-gathering-materials-btn">Start Gathering</button>
+                </form>
+                <form id="hunt-game-form" class="hide">
+                    <label for="traveling-checkbox-hunt">Are you traveling?</label>
+                    <input type="checkbox" id="traveling-checkbox-hunt">
+                
+                    <br>
+                
+                    <label for="biome-select-hunt">Select Biome:</label>
+                    <select id="biome-select-hunt">
+                        <option value="Caves">Caves</option>
+                        <option value="Underground">Underground</option>
+                        <option value="Jungles">Jungles</option>
+                        <option value="Shore">Shore</option>
+                        <option value="Tundra">Tundra</option>
+                        <option value="Forest">Forest</option>
+                        <option value="Desert">Desert</option>
+                        <option value="Grasslands">Grasslands</option>
+                        <option value="Marsh">Marsh</option>
+                        <option value="Mountains">Mountains</option>
+                    </select>
+                
+                    <label for="ability-modifier-hunt">Ability Modifier (Dexterity/Wisdom):</label>
+                    <input type="text" id="ability-modifier-hunt">
+                
+                    <label for="survival-proficiency-hunt">Do you have Survival proficiency?</label>
+                    <input type="checkbox" id="survival-proficiency-hunt">
+                
+                    <div id="proficiency-bonus-section-hunt" class="hide">
+                        <label for="proficiency-bonus-hunt">Proficiency Bonus:</label>
+                        <input type="text" id="proficiency-bonus-hunt">
+                    </div>
+                
+                    <br>
+                    
+                    <button type="button" id="start-hunt-game-btn">Start Hunting</button>
+                </form>       
+            </div>
+        </div>
+    </div>
+</body>
+</html>
