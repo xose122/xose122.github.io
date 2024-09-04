@@ -292,3 +292,25 @@ td {
 .popup-header-btn:hover {
     color: #b30000;
 }
+
+@media only screen and (max-width: 480px) {
+    .only-desktop {
+        display: none;
+    }
+
+    body {
+        font-size: 12px;
+    }
+
+    .wrapper {
+        overflow: auto;
+    }
+
+    .popup-container-wrapper {
+        padding : 10px;   
+    }
+
+    .option {
+        font-size: 32px;
+    }
+}
